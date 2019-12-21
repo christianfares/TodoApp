@@ -1,7 +1,6 @@
 import React, {useState} from 'react'
 
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper'
 import Modal from '@material-ui/core/Modal';
 import Fade from '@material-ui/core/Fade';
 import TextField from '@material-ui/core/TextField';
@@ -34,20 +33,46 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
-export default function EditTodo(state) {
+export default function EditTodo(options) {
+	//console.log(options)
+	const [todo, setTodo] = useState({
+		summary: options.summary,
+		description: options.description
+	})
+
 	const classes = useStyles()
 
 	const handleClose = () => {
-		state.handleClose();
+		options.closeModal();
+	}
+
+	const handleSummaryChange = (e) => {
+		setTodo({
+			...todo,
+			summary: e.target.value
+		})
+	}
+
+	const handleDescriptionChange = (e) => {
+		setTodo({
+			...todo,
+			description: e.target.value
+		})
+	}
+
+	const handleSubmit = (e) => {
+		e.preventDefault()
+		options.closeModal();
+		options.submit(todo.summary, todo.description)
 	}
 
 	return (
 		<Modal
 			className = {classes.modal}
-			open={state.open}
+			open={options.open}
 			onClose={handleClose}
 		>
-			<Fade in={state.open}>
+			<Fade in={options.open}>
 				<Card
 					className={classes.card}
 				>
@@ -55,11 +80,15 @@ export default function EditTodo(state) {
 						title="New Todo"
 					/>
 					<CardContent>
-						<form>
+						<form
+							onSubmit={handleSubmit}
+						>
 							<TextField 
 								fullWidth
 								label="Summary"
 								variant="outlined"
+								value={todo.summary}
+								onChange={handleSummaryChange}
 							/>
 							<TextField 
 								className={classes.textField}
@@ -68,6 +97,8 @@ export default function EditTodo(state) {
 								multiline
 								rows="5"
 								fullWidth
+								value={todo.description}
+								onChange={handleDescriptionChange}
 							/>
 							<Button
 								className={classes.button} 

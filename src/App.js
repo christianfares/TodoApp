@@ -1,4 +1,5 @@
 import React, {useState} from 'react';
+import uuid from 'uuid';
 
 import Todo from './components/Todo'
 import EditTodo from './components/EditTodo'
@@ -11,15 +12,30 @@ import AddSharpIcon from '@material-ui/icons/AddSharp';
 
 
 function App() {
-	const [todos, setTodos] = useState([<Todo/>, <Todo/>, <Todo/>])
+	const emptyInitial = {
+		summary: "Summary",
+		description: "This is some text",
+		isComplete: false
+	}
+	const [todos, setTodos] = useState([<Todo key="4" initialState={emptyInitial}/>])
 	const [open, setOpen] = useState(false)
 	
-	const newTodo = () => {
+	const openModal = () => {
 		setOpen(true)
 	}
 
-	const handleClose = () => {
+	const closeModal = () => {
 		setOpen(false)
+	}
+
+	const handleSubmit = (summary, description) => {
+		const newTodoState = {
+			summary : summary,
+			description: description,
+			isComplete: false
+		}
+		const newTodo = <Todo key="1" initialState = {newTodoState}/>
+		setTodos([...todos, newTodo])
 	}
 
 	return (
@@ -31,13 +47,16 @@ function App() {
 				{todos}
 				<Fab 
 					style={{margin: "10px", float:"right"}}
-					onClick={newTodo}
+					onClick={openModal}
 				>
 					<AddSharpIcon />
 				</Fab>
 				<EditTodo 
 					open = {open}
-					handleClose = {handleClose}
+					closeModal = {closeModal}
+					submit = {handleSubmit}
+					summary=""
+					description=""
 				/>
 			</Container>
 		</React.Fragment>
