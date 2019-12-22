@@ -13,14 +13,16 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import IconButton from '@material-ui/core/IconButton'
 import EditSharpIcon from '@material-ui/icons/EditSharp';
 import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
+import ExpandMoreSharpIcon from '@material-ui/icons/ExpandMoreSharp';
 
-function Todo({initialState}) {
-	//console.log(initialState)
+function Todo(options) {
+	//console.log(options)
+	const initialState = options.initialState
 	const [summary, setSummary] = useState(initialState.summary);
 	const [description, setDescription] = useState(initialState.description);
 	const [isComplete, setIsComplete] = useState(initialState.isComplete);
 
-	function handleChange(e) {
+	function handleCheck(e) {
 		setIsComplete(e.target.checked)
 	}
 
@@ -34,25 +36,30 @@ function Todo({initialState}) {
 		setOpen(false)
 	}
 
-	const handleSubmit = (summary, description) => {
-		setSummary(summary)
-		setDescription(description)
+	const handleSubmit = (info) => {
+		setSummary(info.summary)
+		setDescription(info.description)
 	}
 
 	return (
 		<ExpansionPanel disabled={isComplete}>
 			{/* the pointer event style is to enable the check box while the expansion panel is disabled */}
-			
-			<ExpansionPanelSummary style={{pointerEvents:"auto"}}>
+			<ExpansionPanelSummary 
+				style={{pointerEvents:"auto"}}
+				expandIcon={<ExpandMoreSharpIcon />}
+			>
 				<FormControlLabel
-					control = {<Checkbox />}
+					control = {<Checkbox color="primary"/>}
 					label={summary}
 					onClick={event => event.stopPropagation()}
-					onChange={handleChange}
+					onChange={handleCheck}
 					disabled={false}
 				/>
 			</ExpansionPanelSummary>
-			<IconButton style={{float:"right"}}>
+			<IconButton 
+				style={{float:"right"}}
+				onClick={() => {options.delete(options.id)}}
+			>
 				<DeleteSharpIcon />
 			</IconButton>
 			<IconButton 

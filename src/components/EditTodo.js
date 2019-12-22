@@ -16,11 +16,6 @@ const useStyles = makeStyles(theme => ({
 	  alignItems: 'center',
 	  justifyContent: 'center'
 	},
-	paper: {
-		width:"500px",
-		height:"500px",
-		alignItems: 'center',
-	},
 	textField: {
 		marginTop: "15px"
 	},
@@ -33,7 +28,7 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
-export default function EditTodo(options) {
+function EditTodo(options) {
 	//console.log(options)
 	const [todo, setTodo] = useState({
 		summary: options.summary,
@@ -63,7 +58,10 @@ export default function EditTodo(options) {
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		options.closeModal();
-		options.submit(todo.summary, todo.description)
+		options.submit({
+			summary: todo.summary, 
+			description: todo.description
+		})
 	}
 
 	return (
@@ -85,6 +83,7 @@ export default function EditTodo(options) {
 						>
 							<TextField 
 								fullWidth
+								required
 								label="Summary"
 								variant="outlined"
 								value={todo.summary}
@@ -104,6 +103,7 @@ export default function EditTodo(options) {
 								className={classes.button} 
 								variant="contained"
 								type="submit"
+								color="primary"
 							>
 								Confirm
 							</Button>
@@ -114,3 +114,5 @@ export default function EditTodo(options) {
 		</Modal>
 	)
 }
+
+export default EditTodo
