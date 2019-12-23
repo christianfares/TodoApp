@@ -14,28 +14,60 @@ import IconButton from '@material-ui/core/IconButton'
 import EditSharpIcon from '@material-ui/icons/EditSharp';
 import DeleteSharpIcon from '@material-ui/icons/DeleteSharp';
 import ExpandMoreSharpIcon from '@material-ui/icons/ExpandMoreSharp';
+import { makeStyles } from '@material-ui/core';
 
+/*
+	These are the classes used for this component.
+*/
+const useStyles = makeStyles(theme => ({
+	iconButton: {
+		float: "right"
+	}
+}))
+
+/*
+	This is the component resposible for holding the information, and rendering
+	each individual todo. It has 3 states: summary - string, desctription - string,
+	and isComplete - boolean.
+
+	Another state used is open - boolean, for the current state of the edit modal.
+
+	The options argument holds initial values as well as the delete handler from the parent component.
+*/
 function Todo(options) {
-	//console.log(options)
 	const initialState = options.initialState
 	const [summary, setSummary] = useState(initialState.summary);
 	const [description, setDescription] = useState(initialState.description);
 	const [isComplete, setIsComplete] = useState(initialState.isComplete);
 
+	const [open, setOpen] = useState(false)
+
+	const classes = useStyles()
+
+	/*
+		Mark the isComplete state as true or false based on the checkbox value.
+	*/
 	function handleCheck(e) {
 		setIsComplete(e.target.checked)
 	}
-
-	const [open, setOpen] = useState(false)
 	
+	/*
+		Open the modal
+	*/
 	const openModal = () => {
 		setOpen(true)
 	}
 
+	/*
+		Close the modal
+	*/
 	const closeModal = () => {
 		setOpen(false)
 	}
 
+	/*
+		Submit the information entered in the modal
+	*/
 	const handleSubmit = (info) => {
 		setSummary(info.summary)
 		setDescription(info.description)
@@ -48,6 +80,7 @@ function Todo(options) {
 				style={{pointerEvents:"auto"}}
 				expandIcon={<ExpandMoreSharpIcon />}
 			>
+				{/* stopPropgation is to Stop the expansion panel from opening when the checkbox is clicked */}
 				<FormControlLabel
 					control = {<Checkbox color="primary"/>}
 					label={summary}
@@ -57,13 +90,13 @@ function Todo(options) {
 				/>
 			</ExpansionPanelSummary>
 			<IconButton 
-				style={{float:"right"}}
+				className={classes.iconButton}
 				onClick={() => {options.delete(options.id)}}
 			>
 				<DeleteSharpIcon />
 			</IconButton>
 			<IconButton 
-				style={{float:"right"}}
+				className={classes.iconButton}
 				onClick={openModal}
 				disabled={isComplete}
 			>

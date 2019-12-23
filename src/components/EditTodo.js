@@ -9,7 +9,10 @@ import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 
-
+/*
+	These are the classes used for this component.
+	These are only adjusments to the Material UI components.
+*/
 const useStyles = makeStyles(theme => ({
 	modal: {
 	  display: 'flex',
@@ -28,8 +31,15 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
+/**
+ * This is the component responsible for the modal content, either when editing a current todo or a new one.
+ * I has one state: todo - object containing a string summary and a string description of a todo.
+ *  
+ * @param {*} options
+ * 	contains initial summary and description values, parent handler function to close the modal,
+ * 	and a parent handler function to submit the information. 
+ */
 function EditTodo(options) {
-	//console.log(options)
 	const [todo, setTodo] = useState({
 		summary: options.summary,
 		description: options.description
@@ -37,10 +47,16 @@ function EditTodo(options) {
 
 	const classes = useStyles()
 
+	/*
+		Call the parent handler to close this modal.
+	*/
 	const handleClose = () => {
 		options.closeModal();
 	}
 
+	/*
+		Handle a change the summary input field, by updating the summary in the state.
+	*/
 	const handleSummaryChange = (e) => {
 		setTodo({
 			...todo,
@@ -48,6 +64,9 @@ function EditTodo(options) {
 		})
 	}
 
+	/*
+		Handle a change in the description input field by updating the description in the state.
+	*/
 	const handleDescriptionChange = (e) => {
 		setTodo({
 			...todo,
@@ -55,6 +74,9 @@ function EditTodo(options) {
 		})
 	}
 
+	/*
+		Handle submit. Closes the modal and then calls the parent submit function to submit the information.
+	*/
 	const handleSubmit = (e) => {
 		e.preventDefault()
 		options.closeModal();

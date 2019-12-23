@@ -11,6 +11,10 @@ import AppBar from '@material-ui/core/AppBar';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
 
+/*
+	These are the classes used for this component.
+	These are only adjusments to the Material UI components.
+*/
 const useStyles = makeStyles(theme => ({
 	paper: {
 		height: "100%", 
@@ -20,7 +24,6 @@ const useStyles = makeStyles(theme => ({
 	},
 	header: {
 		padding: "20px",
-		//background: "#141D26"
 	},
 	title: {
 		alignSelf: "center"
@@ -34,6 +37,9 @@ const useStyles = makeStyles(theme => ({
 	}
 }))
 
+/*
+	Updating the primary color of the theme globally.
+*/
 const theme = createMuiTheme({
 	palette: {
 		primary: {
@@ -42,12 +48,21 @@ const theme = createMuiTheme({
 	},
 });
 
+/**
+ * This the main controller of the App. 
+ * It has 2 states: todos - a list of id and todo object pairs and searchTerm - a string holding the current search term
+ * which is then used to filter the todos, either by description or summary.
+ */
 function App() {
 	const [todos, setTodos] = useState([])
 	const [searchTerm, setSearchTerm] = useState("")
 	
 	const classes = useStyles()
 
+	/*
+		Create a new todo object, assign it an id using uuid, and add it to the list.
+		This also clears the search term.
+	*/
 	const newTodo = (info) => {
 		const newTodoState = {
 			summary : info.summary,
@@ -63,14 +78,25 @@ function App() {
 		setSearchTerm("")
 	}
 
+	/*
+		Delete a todo with the give id.
+	*/
 	const deleteTodo = (id) => {
 		setTodos([...todos.filter(todo => todo.id !== id)])
 	}
 
+	/*
+		Change the search term state according to user input.
+	*/
 	const newSearch = (event) => {
 		setSearchTerm(event.target.value.toLowerCase())
 	}
 
+	/*
+		Filter function used for todos.filter below.
+		Checks if the given todo contains the search term as a substring either in the 
+		summary or in the desctiption. Case insesitive.
+	*/
 	const filterTodos = (todo) => {
 		const loweredSummary = todo.todo.summary.toLowerCase()
 		const loweredDescription = todo.todo.description.toLowerCase()
@@ -81,6 +107,9 @@ function App() {
 		}
 	}
 
+	/*
+		This creats a new todo component for rendering.
+	*/
 	const todoComponent = (todo) => {
 		return <Todo
 			key={todo.id}
@@ -111,6 +140,7 @@ function App() {
 						value={searchTerm}
 						onChange={newSearch}
 						/>
+					{/* for every todo in the list, filter it using the search term and then create a component to display. */}
 					{todos.filter(filterTodos).map(todoComponent)}
 					<AddTodoButton 
 						submit={newTodo}
